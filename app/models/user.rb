@@ -5,5 +5,5 @@ class User < ApplicationRecord
   validates :email, presence: true, uniqueness: true 
   normalizes :email, with: -> email { email.strip.downcase }
 
-  enum :status, { active: 0, blocked: 1 }
+  enum :status, { active: "active", blocked: "blocked" }, validate: true
 end
