@@ -10,6 +10,15 @@
       <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
    </div>
 
+   <div class="container mt-3">
+  <% flash.each do |key, value| %>
+    <div class="alert <%= flash_class(key) %> alert-dismissible fade show" role="alert">
+      <%= value %>
+      <button type="button" class="btn-close" data-bs-dismiss="false" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  <% end %>
+</div>
+
     <div class="alert alert-danger alert-dismissible" role="alert">
       <strong>Fail!</strong>
       <button type="button" class="btn-close" data-mdb-dismiss="alert" aria-label="Close"></button>
