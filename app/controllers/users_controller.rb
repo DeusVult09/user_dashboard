@@ -11,16 +11,16 @@ class UsersController < ApplicationController
 
   def create
     @user = User.new(user_params)
-    begin 
-      if @user.save
-        redirect_to new_session_path, notice: "User successfully registered!"
-      else
-        render :new, status: :unprocessable_entity
-      end
-    rescue ActiveRecord::RecordNotUnique
-        @user.errors.add(:email, "has already been registered")
-        render :new, status: :unprocessable_entity
+    @user.last_login_at = Time.current
+
+    if @user.save
+      redirect_to new_session_path, notice: "User successfully registered!"
+    else
+      render :new, status: :unprocessable_entity
     end
+  rescue ActiveRecord::RecordNotUnique
+    @user.errors.add(:email, "has already been registered")
+    render :new, status: :unprocessable_entity
   end
 
   def destroy
@@ -34,6 +34,6 @@ class UsersController < ApplicationController
   end
 
   def user_params
-    params.require(:user).permit(:name, :email, :password, :job_position)
+    params.require(:user).permit(:name, :email, :password, :password_confirmation, :job_position)
   end
 end
