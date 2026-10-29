@@ -1,5 +1,4 @@
 class UsersController < ApplicationController
-  before_action :authenticate_user!
   before_action :set_user, only: %i[destroy]
 
   def index
@@ -14,9 +13,9 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
     begin 
       if @user.save
-        redirect_to @users, flash.now[:notice] = "User successfully registered!"
+        redirect_to new_session_path, notice: "User successfully registered!"
       else
-        redirect_to @users, flash.now[:alert] = "Something went wrong. Please, try again!"
+        render :new, status: :unprocessable_entity
       end
     rescue ActiveRecord::RecordNotUnique
         @user.errors.add(:email, "has already been registered")
@@ -31,10 +30,10 @@ class UsersController < ApplicationController
   private
 
   def set_user
-    @user = User.find(params:[id])
+    @user = User.find(params[:id])
   end
 
   def user_params
-    params.require(:user).permit(:name, :email, :job_position)
+    params.require(:user).permit(:name, :email, :password, :job_position)
   end
 end
