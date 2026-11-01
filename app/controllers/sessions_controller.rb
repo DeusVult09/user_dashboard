@@ -12,7 +12,7 @@ class SessionsController < ApplicationController
       session[:user_id] = user.id 
 
       @user.last_login_at = Time.current
-      redirect_to root_path, notice: "You successfully loggied in"
+      redirect_to root_path, notice: "You successfully logged in"
     else
       flash.now[:alert] = "Email or password is incorrect"
       render :new, status: :unprocessable_entity
