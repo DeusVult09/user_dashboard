@@ -1,7 +1,6 @@
 class SessionsController < ApplicationController
 
   def new
-    @user = User.new
   end
 
   def create
@@ -21,7 +20,7 @@ class SessionsController < ApplicationController
 
   def destroy
     reset_session
-    redirect_to new_session_path, notice: "You succesfully logged out", status: :see_other
+    redirect_to new_session_path, notice: "You successfully logged out", status: :see_other
   end
 
 end
