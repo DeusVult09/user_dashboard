@@ -1,2 +1,17 @@
-<h1>Sessions#new</h1>
-<p>Find me in app/views/sessions/new.html.erb</p>
+
+<h1>Login page</h1>
+<%= form_with url: new_session_path, method: :get do |form| %>
+  <div>
+    <%= f.label :name %><br>
+    <%= f.text_field :name %>
+  </div>
+  <div>
+    <%= f.label :password, autocomplete: "new-password"  %><br>
+    <%= f.password_field :password, autocomplete: "current-password" %>
+  </div>
+  <p>
+    <%= f.submit 'Login' %>
+  </p>
+<% end %>
+
+<%= link_to "Sign up", new_user_path %>
