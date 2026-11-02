@@ -6,7 +6,7 @@ class SessionsController < ApplicationController
 
   def create
     return user_login if user_authenticated? && @user.active?
-    return flash.now[:alert] = "Your account is blocked" if @user.blocked?
+    return login_reject("Your account is blocked") if @user.blocked?
     login_reject
   end
 
@@ -32,8 +32,8 @@ class SessionsController < ApplicationController
     redirect_to root_path, notice: "Welcome to the User Dashboard"
   end
 
-  def login_reject
-    flash.now[:alert] = "Email or password is incorrect" 
+  def login_reject(message = "Email or password is incorrect")
+    flash.now[:alert] = message
     render :new, status: :unprocessable_entity
   end
 end   
