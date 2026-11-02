@@ -1,26 +1,41 @@
 class SessionsController < ApplicationController
+  before_action :set_user, only: %i[create]
 
   def new
   end
 
   def create
-    @user = User.find_by(:email, params[:email])
-
-    if @user && @user.authenticate(params[:password])
-      reset_session
-      session[:user_id] = user.id 
-
-      @user.update_column(last_login_at: Time.current)
-      redirect_to root_path, notice: "You successfully logged in"
-    else
-      flash.now[:alert] = "Email or password is incorrect"
-      render :new, status: :unprocessable_entity
-    end
+    return user_login if user_authenticated? && @user.active?
+    return flash.now[:alert] = "Your account is blocked" if @user.blocked?
+    login_reject
   end
 
   def destroy
     reset_session
-    redirect_to new_session_path, notice: "You successfully logged out", status: :see_other
+    redirect_to new_session_path, notice: "User logged out", status: :see_other
   end
 
-end
+  private 
+
+  def set_user
+    @user = User.find_by(email: params[:email])
+  end
+
+  def user_authenticated?
+    @user&.authenticate(params[:password])
+  end
+
+  def user_login
+    reset_session
+    session[:user_id] = @user.id 
+    @user.update_columns(last_login_at: Time.current)
+    redirect_to root_path, notice: "Welcome to the User Dashboard"
+  end
+
+  def login_reject
+    flash.now[:alert] = "Email or password is incorrect" 
+    render :new, status: :unprocessable_entity
+  end
+end   
+
+
